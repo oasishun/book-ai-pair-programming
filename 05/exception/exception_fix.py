@@ -2,6 +2,8 @@ def main():
     try:
         divisor = 0
         x = 1 / divisor
+    except ZeroDivisionError as e:
+        print("ZeroDivisionError: Cannot divide by zero.", e)
     except Exception as e:
         print("Error", e)
     
