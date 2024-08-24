@@ -6,24 +6,44 @@
 
 ```mermaid
 erDiagram
-    STUDENT ||--o{ CLASS : "attends" 
-    TEACHER ||--o{ CLASS : "teaches"
-    SUBJECT ||--o{ TEACHER : "specializes in"
-    CLASS {
-        string name
-        int number_of_students
+    Grades {
+        int grade_id PK
+        int grade_level
     }
-    STUDENT {
-        string name
-        int age
+
+    Classes {
+        int class_id PK
+        int grade_id FK
+        string class_name
+        int homeroom_teacher_id FK
     }
-    TEACHER {
-        string name
-        string subject
+
+    Students {
+        int student_id PK
+        int class_id FK
+        string student_name
     }
-    SUBJECT {
-        string name
+
+    Teachers {
+        int teacher_id PK
+        string teacher_name
     }
+
+    Subjects {
+        int subject_id PK
+        string subject_name
+    }
+
+    Teacher_Subjects {
+        int teacher_id PK, FK
+        int subject_id PK, FK
+    }
+
+    Grades ||--o{ Classes : "has"
+    Classes ||--o{ Students : "has"
+    Classes }o--|| Teachers : "homeroom teacher"
+    Teachers ||--o{ Teacher_Subjects : "teaches"
+    Subjects ||--o{ Teacher_Subjects : "is taught by"
 ```
 
 ## DFD 
