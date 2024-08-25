@@ -47,45 +47,68 @@ erDiagram
 ```
 
 ## DFD 
-- https://gist.github.com/jiyeonseo/078ae7056e8521a35426e7c276ac756d
 ```mermaid
 graph TD
-    A[Student] -->|Attends| B[Class]
-    C[Teacher] -->|Teaches| B
-    D[Subject] -->|Specializes in| C
-    B -->|Has| E[Number of Students]
-    A -->|Has| F[Name]
-    A -->|Has| G[Age]
-    C -->|Has| H[Name]
-    C -->|Has| I[Subject]
-    D -->|Has| J[Name]
+    %% External Entities
+    Admin[Admin]
+    Teacher[Teacher]
+    Student[Student]
+
+    %% Processes
+    P1[Manage Grades]
+    P2[Manage Classes]
+    P3[Manage Students]
+    P4[Manage Teachers]
+    P5[Manage Subjects]
+
+    %% Data Stores
+    D1[(Grades)]
+    D2[(Classes)]
+    D3[(Students)]
+    D4[(Teachers)]
+    D5[(Subjects)]
+
+    %% Data Flows
+    Admin -->|Manage| P1
+    Admin -->|Manage| P2
+    Admin -->|Manage| P3
+    Admin -->|Manage| P4
+    Admin -->|Manage| P5
+
+    Teacher -->|View/Update| P2
+    Teacher -->|View/Update| P3
+    Teacher -->|View/Update| P5
+
+    Student -->|View| P3
+
+    P1 -->|Store/Update| D1
+    P2 -->|Store/Update| D2
+    P3 -->|Store/Update| D3
+    P4 -->|Store/Update| D4
+    P5 -->|Store/Update| D5
+
+    D1 -->|Retrieve| P2
+    D2 -->|Retrieve| P3
+    D4 -->|Retrieve| P2
+    D5 -->|Retrieve| P4
 ```
 
 ## Sequence Diagram 
 
 ```mermaid
 sequenceDiagram
-    participant Student
-    participant School
-    participant System
-    Student->>School: Apply for admission
-    School->>System: Initiate student registration
-    System->>Student: Request for student details
-    Student->>System: Provide student details
-    System->>School: Register student
+    participant Student as 학생
+    participant Admin as 관리자
+    participant System as 시스템
+
+    Student->>Admin: 입학 신청
+    Admin->>System: 학생 정보 입력
+    System-->>Admin: 학생 정보 저장 완료
+    Admin-->>Student: 입학 승인 통보
+    Admin->>System: 학생 등록
+    System-->>Admin: 등록 완료 통보
+    Admin-->>Student: 등록 완료 통보
+
+    note over Student,Admin: 학생이 학교에 입학하고 등록되는 과정```
 ```
-```mermaid
-sequenceDiagram
-    participant 학생 as Student
-    participant 학교 as School
-    participant 학과 as Department
-    participant 학급 as Class
-    participant 선생님 as Teacher
-    학생->>학교: 입학 신청
-    학교->>학생: 입학 승인
-    학교->>학과: 학생 등록 요청
-    학과->>학급: 학생 배정 요청
-    학급->>선생님: 학생 등록 알림
-    선생님->>학생: 등록 환영 메시지
-    School->>Student: Confirm registration
-```
+
